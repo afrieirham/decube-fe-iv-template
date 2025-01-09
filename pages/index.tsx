@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import axios from "axios";
 import useSWR from "swr";
 
@@ -42,9 +44,13 @@ export default function Home() {
       </h1>
       <div className="grid grid-cols-3 gap-4 w-full max-w-screen-md mx-auto">
         {movies.map((movie) => (
-          <div key={movie.id} className="border rounded-lg p-4">
+          <Link
+            key={movie.id}
+            href={`/${movie.id}`}
+            className="border rounded-lg p-4 hover:bg-gray-50"
+          >
             {movie.title}
-          </div>
+          </Link>
         ))}
       </div>
     </div>
