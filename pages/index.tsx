@@ -1,10 +1,6 @@
 import axios from "axios";
 import useSWR from "swr";
 
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
-
 const fetcher = (url: string, token: string) =>
   axios
     .get(url, { headers: { Authorization: "Bearer " + token } })
@@ -19,7 +15,38 @@ export default function Home() {
     ([url, token]) => fetcher(url, token)
   );
 
-  console.log(data);
+  if (error) return "error";
+  if (!data || isLoading) return "loading...";
 
-  return <main className={inter.className}></main>;
+  const movies = data.results as {
+    adult: boolean;
+    backdrop_path: string;
+    genre_ids: number[];
+    id: number;
+    original_language: string;
+    original_title: string;
+    overview: string;
+    popularity: number;
+    poster_path: string;
+    release_date: string;
+    title: string;
+    video: boolean;
+    vote_average: number;
+    vote_count: number;
+  }[];
+
+  return (
+    <div className="w-full max-w-screen-lg mx-auto flex flex-col">
+      <h1 className="font-bold text-2xl text-center my-16">
+        Popular Movies Today
+      </h1>
+      <div className="grid grid-cols-3 gap-4 w-full max-w-screen-md mx-auto">
+        {movies.map((movie) => (
+          <div key={movie.id} className="border rounded-lg p-4">
+            {movie.title}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
