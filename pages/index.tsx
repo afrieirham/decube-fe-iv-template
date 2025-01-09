@@ -1,24 +1,25 @@
+import axios from "axios";
+import useSWR from "swr";
+
 import { Inter } from "next/font/google";
-import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
-const cn = (...classes: string[]) => classes.filter(Boolean).join(" ");
+
+const fetcher = (url: string, token: string) =>
+  axios
+    .get(url, { headers: { Authorization: "Bearer " + token } })
+    .then((res) => res.data);
+
+const BASE_API = process.env.NEXT_PUBLIC_API_ENDPOINT as string;
+const API_KEY = process.env.NEXT_PUBLIC_BEARER_TOKEN as string;
 
 export default function Home() {
-  return (
-    <main
-      className={cn(
-        "min-h-screen flex flex-col items-center justify-center p-24 gap-4",
-        inter.className
-      )}
-    >
-      <Image
-        src="https://i.giphy.com/l3BwSPbqx3QGKEgpp2.webp"
-        alt="Gif"
-        width={400}
-        height={400}
-      />
-      <p>You can start your project here. Good luck!</p>
-    </main>
+  const { data, error, isLoading } = useSWR(
+    [`${BASE_API}/3/movie/popular`, API_KEY],
+    ([url, token]) => fetcher(url, token)
   );
+
+  console.log(data);
+
+  return <main className={inter.className}></main>;
 }
