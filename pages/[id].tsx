@@ -96,9 +96,18 @@ function MovieDetailsPage() {
           alt=""
           width={1080}
           height={1920}
-          className="w-40"
+          className="w-52 rounded-md"
         />
-        <h1 className="font-bold">{movie.title}</h1>
+        <div className="flex flex-col">
+          <h1 className="font-bold text-xl">{movie.title}</h1>
+          <p>{movie.overview}</p>
+          <div className="flex gap-2 mt-4 text-xs">
+            {movie.genres.map((genre) => (
+              <p key={genre.id}>{genre.name}</p>
+            ))}
+          </div>
+          <p className="mt-4 text-sm">{movie.release_date}</p>
+        </div>
       </div>
     </div>
   );

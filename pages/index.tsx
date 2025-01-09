@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import axios from "axios";
 import useSWR from "swr";
@@ -10,6 +11,7 @@ const fetcher = (url: string, token: string) =>
 
 const BASE_API = process.env.NEXT_PUBLIC_API_ENDPOINT as string;
 const API_KEY = process.env.NEXT_PUBLIC_BEARER_TOKEN as string;
+const POSTER_URL = process.env.NEXT_PUBLIC_API_IMAGE_PATH as string;
 
 export default function Home() {
   const { data, error, isLoading } = useSWR(
@@ -42,14 +44,21 @@ export default function Home() {
       <h1 className="font-bold text-2xl text-center my-16">
         Popular Movies Today
       </h1>
-      <div className="grid grid-cols-3 gap-4 w-full max-w-screen-md mx-auto">
+      <div className="grid grid-cols-3 gap-4 w-full max-w-screen-lg mx-auto mb-16">
         {movies.map((movie) => (
           <Link
             key={movie.id}
             href={`/${movie.id}`}
-            className="border rounded-lg p-4 hover:bg-gray-50"
+            className="border rounded-lg p-4 hover:bg-gray-50 flex flex-col items-center gap-4"
           >
-            {movie.title}
+            <Image
+              src={`${POSTER_URL}${movie.poster_path}`}
+              alt=""
+              width={1080}
+              height={1920}
+              className="w-40"
+            />
+            <p className="text-center">{movie.title}</p>
           </Link>
         ))}
       </div>
